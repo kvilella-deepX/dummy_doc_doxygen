@@ -40,4 +40,4 @@ jobs:
           folder: docs/build/html
           target-folder: ${{ env.dummy_PATH }}
           clean: true # Automatically remove deleted files from the deploy branch
-          clean-exclude: '["version"]'
+          clean-exclude: /version
