@@ -28,7 +28,7 @@ jobs:
         shell: bash
 
       - name: Install package
-        run: pip3 install sphinx furo breathe sphinx-tabs
+        run: pip3 install sphinx breathe sphinx-tabs sphinx-multiversion
         shell: bash
 
       - name: Build sphinx docs
