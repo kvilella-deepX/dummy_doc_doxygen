@@ -2,20 +2,26 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: 
+      - main
   pull_request:
-    branches: [ main ]  
+    branches: 
+      - main
+  release:
+    types:
+      - published
   workflow_dispatch:
 
 jobs:
   build-and-deploy-docs:
     runs-on: ubuntu-20.04
-    if: ${{ github.event_name == 'push' || !github.event.pull_request.draft }}
     steps:
+      - name: Update dummy_PATH
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        run: echo dummy_PATH=/version/$(echo $GITHUB_REF | cut -d / -f 3 | cut -d v -f 2- | cut -d . -f 1,2)/ >> $GITHUB_ENV
+
       - name: Checkout repo
         uses: actions/checkout@v3
-        with:
-          submodules: "true"
           
       - name: Install Doxygen
         run: sudo apt-get update && sudo apt-get install doxygen -y
@@ -26,7 +32,12 @@ jobs:
         shell: bash
 
       - name: Deploy the docs to GitHub pages
+        #if: ${{ startsWith(github.ref, 'refs/tags/') }}
         uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
-          folder: docs/build/html  
+          folder: docs/build/html
+          target-folder: ${{ env.dummy_PATH }}
+          clean: true # Automatically remove deleted files from the deploy branch
+          clean-exclude: '["version"]'
