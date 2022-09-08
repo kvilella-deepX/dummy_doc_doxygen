@@ -29,7 +29,7 @@ html_sidebars = {
 }
 
 # Whitelist pattern for tags (set to None to ignore all tags)
-smv_tag_whitelist = r"^v*$"
+smv_tag_whitelist = r'^v\d+\.\d+\.\d+$'
 
 # Whitelist pattern for branches (set to None to ignore all branches)
 smv_branch_whitelist = r"^main$"
@@ -38,13 +38,13 @@ smv_branch_whitelist = r"^main$"
 smv_remote_whitelist = r"^origin$"
 
 # Pattern for released versions
-#smv_released_pattern = r'^*tags*$'
+smv_released_pattern = r'^tags/v\d+\.\d+\.\d+$'
 
 # Format for versioned output directories inside the build directory
 #smv_outputdir_format = '{ref.name}'
 
 # Determines whether remote or local git branches/tags are preferred if their output dirs conflict
-#smv_prefer_remote_refs = False
+smv_prefer_remote_refs = True
 
 #import subprocess
 #subprocess.call('make clean', shell=True)

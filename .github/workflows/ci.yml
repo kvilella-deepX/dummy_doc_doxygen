@@ -33,13 +33,14 @@ jobs:
 
       - name: Build sphinx docs
         run: |
-          mkdir html
-          sphinx-multiversion docs html
+          sphinx-multiversion docs/ build/html
+          touch build/html/.nojekyll
+          ln -srf build/html/$(git tag -l --sort=creatordate |tail -1) build/html/latest  # auto-link the latest tag
 
       - name: Deploy the docs to GitHub pages
         uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
-          folder: html
+          folder: build/html
           target-folder: ${{ env.dummy_PATH }}
