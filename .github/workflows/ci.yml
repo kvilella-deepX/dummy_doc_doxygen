@@ -35,9 +35,9 @@ jobs:
         #if: ${{ startsWith(github.ref, 'refs/tags/') }}
         uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
           folder: docs/build/html
-          TARGET_FOLDER: ${{ env.dummy_PATH }}
-          CLEAN: true # Automatically remove deleted files from the deploy branch
-          CLEAN_EXCLUDE: '["version"]'
+          target-folder: ${{ env.dummy_PATH }}
+          clean: true # Automatically remove deleted files from the deploy branch
+          clean-exclude: '["version"]'
