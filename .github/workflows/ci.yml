@@ -4,7 +4,10 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]  
+    branches: [ main ]
+  release:
+    types:
+      - published
   workflow_dispatch:
 
 jobs:
@@ -12,6 +15,10 @@ jobs:
     runs-on: ubuntu-20.04
     if: ${{ github.event_name == 'push' || !github.event.pull_request.draft }}
     steps:
+      - name: Update dummy_PATH
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        run: echo dummy_PATH=/version/$(echo $GITHUB_REF | cut -d / -f 3 | cut -d v -f 2- | cut -d . -f 1,2)/ >> $GITHUB_ENV
+
       - name: Checkout repo
         uses: actions/checkout@v3
         with:
@@ -28,5 +35,9 @@ jobs:
       - name: Deploy the docs to GitHub pages
         uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
-          folder: docs/build/html  
+          folder: docs/build/html
+          TARGET_FOLDER: ${{ dummy_PATH }}
+          CLEAN: true # Automatically remove deleted files from the deploy branch
+          CLEAN_EXCLUDE: '["version"]'
