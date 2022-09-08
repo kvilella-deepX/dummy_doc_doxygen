@@ -17,6 +17,14 @@ extensions = [
 #
 html_theme = 'haiku' # 'alabaster'
 
+templates_path = [
+    "_templates",
+]
+
+html_sidebars = [
+    "versioning.html",
+]
+
 import subprocess
 subprocess.call('make clean', shell=True)
 subprocess.call('cd ../../doxygen ; doxygen', shell=True)
