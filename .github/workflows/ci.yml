@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Update dummy_PATH
         if: ${{ startsWith(github.ref, 'refs/tags/') }}
-        run: echo dummy_PATH=/$(echo $GITHUB_REF | cut -d / -f 3 | cut -d v -f 2- | cut -d . -f 1,2)/ >> $GITHUB_ENV
+        run: echo dummy_PATH=/version/$(echo $GITHUB_REF | cut -d / -f 3 | cut -d v -f 2- | cut -d . -f 1,2)/ >> $GITHUB_ENV
 
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -33,14 +33,14 @@ jobs:
 
       - name: Build sphinx docs
         run: |
-          sphinx-multiversion docs/ build/html
-          touch build/html/.nojekyll
-          ln -srf build/html/$(git tag -l --sort=creatordate |tail -1) build/html/latest  # auto-link the latest tag
-
+          cd docs/sphinx/
+          sphinx-multiversion source build/html
       - name: Deploy the docs to GitHub pages
         uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
-          folder: build/html
+          folder: docs/build/html
           target-folder: ${{ env.dummy_PATH }}
+          clean: true # Automatically remove deleted files from the deploy branch
+          clean-exclude: /version
