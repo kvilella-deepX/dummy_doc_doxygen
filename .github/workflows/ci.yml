@@ -27,14 +27,6 @@ jobs:
         run: sudo apt-get update && sudo apt-get install doxygen -y
         shell: bash
 
-      - name: Install package
-        run: pip3 install sphinx breathe sphinx-tabs sphinx-multiversion
-        shell: bash
-
-      - name: Build sphinx docs
-        run: |
-          cd docs/sphinx/
-          sphinx-multiversion source build/html
       - name: Deploy the docs to GitHub pages
         uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
