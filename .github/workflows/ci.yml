@@ -27,21 +27,16 @@ jobs:
         run: sudo apt-get update && sudo apt-get install doxygen -y
         shell: bash
 
-      - name: Install package
-        run: pip3 install sphinx breathe sphinx-tabs sphinx-multiversion
+      - name: Generate Doxygen Documentation
+        run: cd docs && doxygen
         shell: bash
-
-      - name: Build sphinx docs
-        run: |
-          cd docs/sphinx/
-          sphinx-multiversion source build/html
 
       - name: Deploy the docs to GitHub pages
         uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
-          folder: docs/sphinx/build/html
+          folder: docs/build/html
           target-folder: ${{ env.dummy_PATH }}
           clean: true # Automatically remove deleted files from the deploy branch
           clean-exclude: /version
